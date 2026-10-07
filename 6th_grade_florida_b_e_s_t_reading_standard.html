@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Florida B.E.S.T. 6th Grade ELA - ELA.6.R.1.2 Theme Lab</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        florida: {
+                            50: '#fff7ed',
+                            100: '#ffedd5',
+                            500: '#f97316', // Sunshine Orange
+                            600: '#ea580c',
+                            700: '#c2410c',
+                        },
+                        teal: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#14b8a6',
+                            600: '#0d9488',
+                            700: '#0f766e',
+                        },
+                        indigo: {
+                            50: '#eef2ff',
+                            600: '#4f46e5',
+                            700: '#4338ca'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        .tab-btn.active {
+            border-bottom: 3px solid #ea580c;
+            color: #ea580c;
+            font-weight: 700;
+        }
+
+        .highlight-clue {
+            background-color: #fef08a;
+            border-bottom: 2px dashed #ca8a04;
+            cursor: pointer;
+            padding: 0 4px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+        .highlight-clue:hover {
+            background-color: #fde047;
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 flex flex-col min-h-screen font-sans antialiased">
+
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="bg-gradient-to-tr from-florida-600 to-amber-500 text-white p-2.5 rounded-xl shadow-md flex items-center justify-center">
+                    <i data-lucide="book-open-check" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <div class="flex items-center space-x-2">
+                        <span class="bg-florida-100 text-florida-700 text-[10px] font-extrabold px-2 py-0.5 rounded uppercase tracking-wider">FL B.E.S.T. Aligned</span>
+                        <span class="text-xs font-semibold text-slate-500">ELA.6.R.1.2</span>
+                    </div>
+                    <h1 class="text-base sm:text-lg font-bold text-slate-800">
+                        6th Grade Reading: Theme Mastery Lab
+                    </h1>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-4">
+                <div class="hidden sm:flex items-center bg-teal-50 border border-teal-200 rounded-full px-3 py-1">
+                    <i data-lucide="award" class="w-4 h-4 text-teal-600 mr-2"></i>
+                    <span class="text-xs font-medium text-teal-800">Theme Master Level: <strong id="badgeStatusText">Initiate (0/8)</strong></span>
+                </div>
+
+                <button id="mobileSidebarBtn" onclick="toggleSidebar()" class="lg:hidden p-2 rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200">
+                    <i data-lucide="menu" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex-1 max-w-7xl w-full mx-auto p-3 sm:p-4 lg:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        <!-- Main Video & Interactive Workspace Left Side -->
+        <main class="lg:col-span-8 flex flex-col space-y-6">
+            
+            <!-- Video Canvas Container -->
+            <div class="bg-slate-950 rounded-2xl shadow-xl overflow-hidden flex flex-col relative group">
+                
+                <!-- Story Canvas Area -->
+                <div class="relative w-full aspect-video bg-slate-900 flex items-center justify-center overflow-hidden">
+                    <canvas id="storyCanvas" class="w-full h-full object-contain cursor-pointer"></canvas>
+                    
+                    <!-- Overlay Start/Pause Button -->
+                    <div id="playOverlay" onclick="togglePlay()" class="absolute inset-0 bg-black/40 backdrop-blur-[1px] flex items-center justify-center cursor-pointer transition-opacity duration-300">
+                        <div class="w-20 h-20 rounded-full bg-florida-600/90 text-white flex items-center justify-center shadow-2xl transform group-hover:scale-110 transition-all duration-300">
+                            <i id="overlayPlayIcon" data-lucide="play" class="w-10 h-10 ml-1"></i>
+                        </div>
+                    </div>
+
+                    <!-- FL Standard Badge Indicator -->
+                    <div class="absolute top-3 left-3 bg-slate-900/85 backdrop-blur-md px-3 py-1.5 rounded-full border border-slate-700/60 text-xs font-semibold text-amber-300 flex items-center space-x-2">
+                        <span class="w-2 h-2 rounded-full bg-florida-500 animate-ping"></span>
+                        <span id="canvasChapterTitle">Scene 1: Sturdy Oak & Flexible Willow</span>
+                    </div>
+
+                    <!-- Dynamic Theme Cue Popover Notification -->
+                    <div id="cueOverlay" class="absolute top-3 right-3 max-w-xs bg-amber-500/95 text-slate-950 p-3 rounded-xl shadow-xl text-xs font-bold border border-amber-300 transition-all duration-500 transform translate-x-full opacity-0">
+                        <div class="flex items-center space-x-1.5 mb-1">
+                            <i data-lucide="search" class="w-4 h-4"></i>
+                            <span class="uppercase tracking-wide text-[10px] font-black">Theme Clue Detected</span>
+                        </div>
+                        <p id="cueOverlayText">Character Action reveals contrast in mindset!</p>
+                    </div>
+
+                    <!-- Subtitle Caption Banner -->
+                    <div class="absolute bottom-3 left-4 right-4 bg-slate-950/80 backdrop-blur-md border border-slate-800 p-2.5 rounded-xl text-center">
+                        <p id="captionText" class="text-xs sm:text-sm font-medium text-slate-100 italic">
+                            "Press play to start 'The Willow and the Oak' fable."
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Custom Player Controls Bar -->
+                <div class="bg-slate-900 px-4 py-3 text-white flex flex-col space-y-2 border-t border-slate-800 select-none">
+                    <!-- Progress Scrubber -->
+                    <div class="relative flex items-center">
+                        <input type="range" id="timelineSlider" min="0" max="100" value="0" step="0.1" 
+                            oninput="seekVideo(this.value)" 
+                            class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-florida-500 focus:outline-none">
+                        
+                        <!-- Timeline Bookmark Indicators -->
+                        <div id="chapterMarkersContainer" class="absolute inset-x-0 top-1/2 -translate-y-1/2 pointer-events-none px-1"></div>
+                    </div>
+
+                    <!-- Lower Controls -->
+                    <div class="flex items-center justify-between text-xs sm:text-sm pt-1">
+                        <div class="flex items-center space-x-3">
+                            <button onclick="togglePlay()" class="p-1.5 hover:bg-slate-800 rounded-lg text-slate-200 hover:text-white transition">
+                                <i id="playBtnIcon" data-lucide="play" class="w-5 h-5"></i>
+                            </button>
+                            <button onclick="restartVideo()" class="p-1.5 hover:bg-slate-800 rounded-lg text-slate-300 hover:text-white transition" title="Restart Story">
+                                <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+                            </button>
+                            <span class="font-mono text-slate-400 text-xs">
+                                <span id="currentTimeText">00:00</span> / <span id="durationTimeText">02:40</span>
+                            </span>
+                        </div>
+
+                        <div class="flex items-center space-x-3">
+                            <select id="speedSelect" onchange="changeSpeed(this.value)" class="bg-slate-800 text-slate-300 text-xs py-1 px-2 rounded border border-slate-700 focus:outline-none">
+                                <option value="0.75">0.75x</option>
+                                <option value="1" selected>1.0x</option>
+                                <option value="1.25">1.25x</option>
+                            </select>
+
+                            <button onclick="toggleAudioMute()" class="p-1.5 hover:bg-slate-800 rounded-lg text-slate-300 hover:text-white">
+                                <i id="volumeIcon" data-lucide="volume-2" class="w-4 h-4"></i>
+                            </button>
+
+                            <button onclick="toggleFullscreen()" class="p-1.5 hover:bg-slate-800 rounded-lg text-slate-300 hover:text-white transition">
+                                <i data-lucide="maximize" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
+                <!-- Navigation Tabs -->
+                <div class="flex border-b border-slate-200 bg-slate-50/70 overflow-x-auto">
+                    <button onclick="switchTab('quiz')" id="tab-quiz" class="tab-btn active px-4 sm:px-6 py-3 text-xs sm:text-sm font-medium text-slate-600 flex items-center space-x-2 whitespace-nowrap">
+                        <i data-lucide="help-circle" class="w-4 h-4"></i>
+                        <span>B.E.S.T. Assessment Quiz (8 Questions)</span>
+                    </button>
+                    <button onclick="switchTab('passage')" id="tab-passage" class="tab-btn px-4 sm:px-6 py-3 text-xs sm:text-sm font-medium text-slate-600 flex items-center space-x-2 whitespace-nowrap">
+                        <i data-lucide="book-open" class="w-4 h-4"></i>
+                        <span>Interactive Passage Reader</span>
+                    </button>
+                    <button onclick="switchTab('organizer')" id="tab-organizer" class="tab-btn px-4 sm:px-6 py-3 text-xs sm:text-sm font-medium text-slate-600 flex items-center space-x-2 whitespace-nowrap">
+                        <i data-lucide="layout-grid" class="w-4 h-4"></i>
+                        <span>Theme Detective Formula</span>
+                    </button>
+                    <button onclick="switchTab('notes')" id="tab-notes" class="tab-btn px-4 sm:px-6 py-3 text-xs sm:text-sm font-medium text-slate-600 flex items-center space-x-2 whitespace-nowrap">
+                        <i data-lucide="file-text" class="w-4 h-4"></i>
+                        <span>Florida ELA Notepad</span>
+                    </button>
+                </div>
+
+                <!-- Tab Contents Container -->
+                <div class="p-4 sm:p-6">
+                    
+                    <!-- TAB 1: Expanded Quiz (Default) -->
+                    <div id="content-quiz" class="tab-content space-y-5">
+                        
+                        <!-- Quiz Progress Bar & Score Banner -->
+                        <div class="bg-slate-900 text-white rounded-xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+                            <div>
+                                <div class="text-xs text-amber-400 font-semibold uppercase tracking-wider">Florida B.E.S.T. Practice Test</div>
+                                <h3 class="text-sm sm:text-base font-bold text-white">ELA.6.R.1.2 Benchmark Assessment</h3>
+                            </div>
+                            
+                            <div class="flex items-center space-x-4 w-full sm:w-auto justify-between sm:justify-end">
+                                <div class="text-center">
+                                    <div class="text-xs text-slate-400">Score</div>
+                                    <div id="quizScoreDisplay" class="text-lg font-black text-emerald-400">0 / 8</div>
+                                </div>
+                                <div class="w-24 sm:w-32 bg-slate-800 h-3 rounded-full overflow-hidden border border-slate-700">
+                                    <div id="quizProgressBar" class="bg-gradient-to-r from-amber-500 to-emerald-400 h-full w-0 transition-all duration-300"></div>
+                                </div>
+                                <button onclick="resetQuizState()" class="p-2 text-slate-400 hover:text-white bg-slate-800 rounded-lg" title="Reset Quiz">
+                                    <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Questions Container -->
+                        <div id="quizContainer" class="space-y-6">
+                            <!-- Injected dynamically via JS -->
+                        </div>
+                    </div>
+
+                    <!-- TAB 2: Interactive Passage Reader -->
+                    <div id="content-passage" class="tab-content hidden space-y-4">
+                        <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs text-amber-900 flex items-center space-x-2">
+                            <i data-lucide="info" class="w-4 h-4 text-amber-600 shrink-0"></i>
+                            <span>Click on the <mark class="highlight-clue">highlighted text clues</mark> below to uncover how author choices build the implied theme!</span>
+                        </div>
+
+                        <div class="prose prose-slate max-w-none text-xs sm:text-sm leading-relaxed space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
+                            <h3 class="text-base font-bold text-slate-800">The Willow and the Oak</h3>
+                            <p>
+                                High upon a windy Florida ridge stood a tall, mighty Oak tree. Beside him grew a slender Willow tree. The Oak boasted daily to the forest animals, 
+                                <span class="highlight-clue" onclick="showClueDetail(1)">"Look at my thick trunk and sturdy roots! I stand firm against everything and bend for no one."</span>
+                            </p>
+                            <p>
+                                The gentle Willow whispered, 
+                                <span class="highlight-clue" onclick="showClueDetail(2)">"I may be soft, but I yield gracefully when the strong winds sweep from the gulf coast."</span> The Oak scoffed at the Willow's humble attitude.
+                            </p>
+                            <p>
+                                One evening, a powerful storm raged across the ridge. Fierce winds battered the trees. The Oak stood rigid, fighting every gust with all his strength, refusing to bow. 
+                                <span class="highlight-clue" onclick="showClueDetail(3)">With a violent crash, the proud Oak snapped at his base.</span>
+                            </p>
+                            <p>
+                                Meanwhile, the flexible Willow bent low with the wind, letting the storm pass over her. When morning sun illuminated the forest, the Willow straightened gently, unharmed. 
+                                <span class="highlight-clue" onclick="showClueDetail(4)">The fallen Oak sighed, realizing that true strength lies not in stubborn rigidity, but in adaptability.</span>
+                            </p>
+                        </div>
+
+                        <div id="clueDetailBox" class="hidden p-3.5 bg-florida-50 border border-florida-200 rounded-xl text-xs text-florida-900 space-y-1">
+                            <div class="font-bold flex items-center space-x-1.5 text-florida-700">
+                                <i data-lucide="sparkles" class="w-4 h-4"></i>
+                                <span id="clueDetailTitle">Theme Analysis Cue</span>
+                            </div>
+                            <p id="clueDetailText">Select a clue above to inspect.</p>
+                        </div>
+                    </div>
+
+                    <!-- TAB 3: Theme Detective Graphic Organizer -->
+                    <div id="content-organizer" class="tab-content hidden space-y-4">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-bold text-slate-800 text-sm sm:text-base">Florida B.E.S.T. Theme Detective Formula</h3>
+                            <button onclick="resetOrganizer()" class="text-xs text-slate-500 hover:text-florida-600 flex items-center space-x-1">
+                                <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+                                <span>Reset Formula</span>
+                            </button>
+                        </div>
+
+                        <p class="text-xs text-slate-500">Theme is NOT just one word (like 'Courage'). In 6th grade, theme is a full statement about life derived from Character Actions and Conflict Resolution.</p>
+
+                        <!-- Formula Grid Builder -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                            <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 flex flex-col justify-between space-y-2">
+                                <span class="text-[10px] font-bold text-florida-600 uppercase">Step 1: Character Action</span>
+                                <select id="orgStep1" onchange="checkOrganizerFormula()" class="w-full text-xs p-2 rounded-lg border border-slate-300 bg-white focus:outline-none focus:ring-1 focus:ring-florida-500">
+                                    <option value="">-- Choose Character Trait/Action --</option>
+                                    <option value="rigid">Oak refuses to bend and boasts of strength</option>
+                                    <option value="flee">Willow leaves the forest during storm</option>
+                                    <option value="angry">Oak gets angry at the rain</option>
+                                </select>
+                            </div>
+
+                            <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 flex flex-col justify-between space-y-2">
+                                <span class="text-[10px] font-bold text-teal-600 uppercase">Step 2: Conflict Outcome</span>
+                                <select id="orgStep2" onchange="checkOrganizerFormula()" class="w-full text-xs p-2 rounded-lg border border-slate-300 bg-white focus:outline-none focus:ring-1 focus:ring-teal-500">
+                                    <option value="">-- Choose Conflict Resolution --</option>
+                                    <option value="win">Oak easily wins the storm battle</option>
+                                    <option value="snapped">Rigid Oak snaps; Flexible Willow survives</option>
+                                    <option value="fly">Both trees fly away</option>
+                                </select>
+                            </div>
+
+                            <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 flex flex-col justify-between space-y-2">
+                                <span class="text-[10px] font-bold text-indigo-600 uppercase">Step 3: Stated/Implied Theme</span>
+                                <select id="orgStep3" onchange="checkOrganizerFormula()" class="w-full text-xs p-2 rounded-lg border border-slate-300 bg-white focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                                    <option value="">-- Infer Implied Theme Statement --</option>
+                                    <option value="trees">Trees grow best near Florida coastlines.</option>
+                                    <option value="flexibility">Flexibility and humility allow one to survive hardships better than pride.</option>
+                                    <option value="weather">Storms are dangerous for large plants.</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div id="organizerResult" class="p-4 rounded-xl border border-slate-200 bg-slate-100 text-xs text-slate-600 text-center font-medium">
+                            Complete all 3 steps above to test your Implied Theme Formula!
+                        </div>
+                    </div>
+
+                    <!-- TAB 4: Student ELA Notepad -->
+                    <div id="content-notes" class="tab-content hidden space-y-3">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-bold text-slate-800 text-sm flex items-center">
+                                <i data-lucide="edit-3" class="w-4 h-4 text-florida-600 mr-1.5"></i>
+                                Florida Standard ELA.6.R.1.2 Reflection Notes
+                            </h3>
+                            <button onclick="exportNotes()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs px-3 py-1.5 rounded-lg border border-slate-200 font-medium flex items-center space-x-1">
+                                <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                                <span>Export TXT</span>
+                            </button>
+                        </div>
+                        <textarea id="elaNotes" rows="5" placeholder="Record key takeaways here (e.g., Theme is a universal message about life. Main idea is what the specific story is about...)" class="w-full p-3 text-xs sm:text-sm border border-slate-200 rounded-xl focus:ring-2 focus:ring-florida-500 focus:outline-none bg-slate-50"></textarea>
+                        <div class="flex justify-between items-center text-[11px] text-slate-400">
+                            <span id="noteSaveStatus">Auto-saved to browser</span>
+                            <button onclick="insertThemePrompt()" class="text-florida-600 font-semibold hover:underline">
+                                + Insert Florida B.E.S.T. Theme Checklist Prompt
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+
+        <aside id="sidebar" class="lg:col-span-4 bg-white rounded-2xl border border-slate-200 shadow-sm p-4 sm:p-5 flex flex-col space-y-5">
+            
+            <!-- Standard Header Card -->
+            <div class="border-b border-slate-100 pb-3">
+                <span class="bg-teal-100 text-teal-800 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase tracking-wider">Florida Benchmark</span>
+                <h2 class="font-bold text-slate-800 text-base sm:text-lg mt-1">ELA.6.R.1.2 Theme Guide</h2>
+                <p class="text-xs text-slate-500 mt-1 leading-relaxed">
+                    Analyze the development of stated or implied theme(s) over the course of a text.
+                </p>
+            </div>
+
+            <!-- Chapter Navigation Accordion -->
+            <div class="space-y-2">
+                <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Lesson Video Chapters</h4>
+                <div id="chapterList" class="space-y-2">
+                    <!-- Injected via JavaScript -->
+                </div>
+            </div>
+
+            <!-- B.E.S.T. Theme vs Main Idea Cheat Card -->
+            <div class="bg-gradient-to-br from-florida-50 to-amber-50 border border-florida-200 rounded-xl p-3.5 space-y-2 text-xs">
+                <h4 class="font-bold text-florida-900 flex items-center space-x-1.5">
+                    <i data-lucide="lightbulb" class="w-4 h-4 text-florida-600"></i>
+                    <span>FL B.E.S.T. Test Tip: Theme vs. Topic</span>
+                </h4>
+                <ul class="space-y-1.5 text-slate-700 text-[11px] leading-snug">
+                    <li class="flex items-start">
+                        <strong class="text-rose-600 mr-1">❌ Incorrect:</strong> "The theme is trees and storms." (This is a <em>Topic/Main Idea</em>)
+                    </li>
+                    <li class="flex items-start">
+                        <strong class="text-emerald-700 mr-1">✅ Correct:</strong> "Flexibility helps one survive life's storms." (This is a <em>Universal Theme</em>)
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Mastery Checklist Box -->
+            <div class="bg-slate-50 border border-slate-200 rounded-xl p-3.5 space-y-2">
+                <div class="flex items-center justify-between">
+                    <h4 class="font-bold text-xs uppercase tracking-wide text-slate-600">Standard Mastery Checklist</h4>
+                    <span id="checklistCount" class="text-[11px] font-bold text-florida-600">0/3 Ready</span>
+                </div>
+                <div id="checkListContainer" class="space-y-2 text-xs">
+                    <!-- Checkboxes injected by JS -->
+                </div>
+            </div>
+
+        </aside>
+
+    </div>
+
+    <script>
+        const CHAPTERS = [
+            { id: 0, time: 0, title: "1. Stated vs. Implied Theme", desc: "Understanding how themes are communicated.", cue: "Notice how character dialogue hints at mindsets!" },
+            { id: 1, time: 40, title: "2. Sturdy Oak & Flexible Willow", desc: "Character actions in the beginning.", cue: "Oak's pride vs Willow's humility setting up conflict." },
+            { id: 2, time: 90, title: "3. The Florida Storm Rages", desc: "Conflict resolution development.", cue: "The peak conflict where theme is tested!" },
+            { id: 3, time: 130, title: "4. Inferring the Implied Theme", desc: "Synthesizing character outcomes.", cue: "Stated summary: Adaptability is true strength." }
+        ];
+
+        // 8 Florida B.E.S.T. Aligned ELA Assessment Questions
+        const QUIZ_QUESTIONS = [
+            {
+                id: 1,
+                category: "Implied Theme Statement",
+                question: "Which statement best expresses the IMPLIED theme of 'The Willow and the Oak'?",
+                options: [
+                    "A. Oak trees are not native to Florida hurricane coastal zones.",
+                    "B. True strength comes from adaptability and humility, not stubborn pride.",
+                    "C. Younger trees always survive longer than older trees in dense forests.",
+                    "D. It is dangerous to talk to neighboring plants during a storm."
+                ],
+                correct: 1,
+                explanation: "Correct! Option B expresses a universal theme (a lesson about life applicable beyond this specific story). Options A, C, and D are either incorrect facts or plot details."
+            },
+            {
+                id: 2,
+                category: "Character Action & Theme",
+                question: "How does the author develop the theme over the course of the fable?",
+                options: [
+                    "A. By giving a detailed scientific description of soil conditions on the ridge.",
+                    "B. By contrasting the Oak's rigid attitude with the Willow's willingness to yield during the storm.",
+                    "C. By explaining how birds build nests in both oak and willow branches.",
+                    "D. By showing that the Oak tree apologized to the forest animals."
+                ],
+                correct: 1,
+                explanation: "Correct! Authors build implied themes by contrasting how characters respond to conflict (the Oak's rigid refusal vs. Willow's flexibility)."
+            },
+            {
+                id: 3,
+                category: "Stated vs. Implied Distinction",
+                question: "What is the primary difference between a STATED theme and an IMPLIED theme?",
+                options: [
+                    "A. A stated theme is longer than an implied theme.",
+                    "B. A stated theme is directly written in the text, while an implied theme must be inferred by the reader.",
+                    "C. A stated theme only appears in non-fiction articles, never in stories.",
+                    "D. An implied theme is always stated in the very first sentence of a text."
+                ],
+                correct: 1,
+                explanation: "Correct! Florida B.E.S.T. ELA.6.R.1.2 defines stated themes as explicitly written by the author, whereas implied themes require readers to analyze clues like character actions and plot outcomes."
+            },
+            {
+                id: 4,
+                category: "Topic vs. Theme",
+                question: "A student states: 'The theme of this fable is STORMS.' Why is this statement INACCURATE under Florida B.E.S.T. standards?",
+                options: [
+                    "A. Storms do not happen in Florida.",
+                    "B. 'Storms' is a topic or main idea subject, whereas a theme is a full universal statement or lesson about life.",
+                    "C. The story takes place during a sunny afternoon, not a storm.",
+                    "D. Themes must always be at least three sentences long."
+                ],
+                correct: 1,
+                explanation: "Correct! Under 6th-grade B.E.S.T. standards, a single word like 'Storms' or 'Trees' is a Topic. A Theme requires a complete statement about life (e.g., 'Preparation helps one weather life's storms')."
+            },
+            {
+                id: 5,
+                category: "Two-Part Item (Part A)",
+                question: "[PART A] What character flaw in the Oak leads directly to his downfall during the hurricane?",
+                options: [
+                    "A. His deep roots.",
+                    "B. His stubborn pride and refusal to bend under pressure.",
+                    "C. His lack of leaves.",
+                    "D. His fear of the dark night."
+                ],
+                correct: 1,
+                explanation: "Correct! The Oak's pride ('I bend for no one!') prevents him from adjusting to the storm's force."
+            },
+            {
+                id: 6,
+                category: "Two-Part Item (Part B)",
+                question: "[PART B] Which detail from the story best supports the answer to Part A?",
+                options: [
+                    "A. 'High upon a windy Florida ridge stood a tall, mighty Oak tree.'",
+                    "B. 'Look at my thick trunk... I stand firm against everything and bend for no one.'",
+                    "C. 'The gentle Willow whispered, I may be soft...'",
+                    "D. 'When morning sun illuminated the forest, the Willow straightened gently.'"
+                ],
+                correct: 1,
+                explanation: "Correct! Quote B directly provides evidence of the Oak boasting about refusing to yield, demonstrating his pride."
+            },
+            {
+                id: 7,
+                category: "Conflict Resolution Analysis",
+                question: "At the end of the story, why is the Willow unharmed while the Oak is snapped?",
+                options: [
+                    "A. The wind completely skipped the right side of the ridge.",
+                    "B. The Willow bent low with the wind, allowing the destructive force to pass over her.",
+                    "C. Forest animals held the Willow up during the heavy rain.",
+                    "D. The Oak surrendered to the Willow before the storm arrived."
+                ],
+                correct: 1,
+                explanation: "Correct! The Willow's action of bending low symbolizes yielding to circumstances that cannot be fought directly, proving the theme."
+            },
+            {
+                id: 8,
+                category: "Universal Application",
+                question: "Which real-life scenario best reflects the SAME universal theme as 'The Willow and the Oak'?",
+                options: [
+                    "A. A student who studies for three hours to score an A on a math test.",
+                    "B. An athlete who adapts their game strategy when a teammate is injured, leading the team to victory.",
+                    "C. A chef who refuses to change a recipe even when customers complain it is burned.",
+                    "D. A driver who gets lost because they forgot to check the map."
+                ],
+                correct: 1,
+                explanation: "Correct! Option B shows adaptability in the face of unexpected challenge, perfectly reflecting the fable's universal theme."
+            }
+        ];
+
+        let isPlaying = false;
+        let currentTime = 0;
+        let duration = 160;
+        let playbackSpeed = 1.0;
+        let currentChapterIndex = 0;
+        let animationFrameId = null;
+        let audioCtx = null;
+        let masterChecklist = { c1: false, c2: false, c3: false };
+        let userQuizAnswers = {}; // track score
+
+        const canvas = document.getElementById('storyCanvas');
+        const ctx = canvas.getContext('2d');
+        const timelineSlider = document.getElementById('timelineSlider');
+
+        window.addEventListener('DOMContentLoaded', () => {
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            if (window.lucide) lucide.createIcons();
+
+            // Load saved notes
+            const savedNotes = localStorage.getItem('fl_best_ela_notes');
+            if (savedNotes) {
+                document.getElementById('elaNotes').value = savedNotes;
+            }
+
+            document.getElementById('elaNotes').addEventListener('input', (e) => {
+                localStorage.setItem('fl_best_ela_notes', e.target.value);
+                document.getElementById('noteSaveStatus').innerText = 'Saved at ' + new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+            });
+
+            renderChaptersSidebar();
+            renderChapterMarkers();
+            renderChecklist();
+            renderQuiz();
+            renderCanvasFrame();
+        });
+
+        function resizeCanvas() {
+            const rect = canvas.parentElement.getBoundingClientRect();
+            canvas.width = rect.width * (window.devicePixelRatio || 1);
+            canvas.height = rect.height * (window.devicePixelRatio || 1);
+            renderCanvasFrame();
+        }
+
+        function playChime(type) {
+            try {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                if (type === 'success') {
+                    osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
+                    osc.frequency.exponentialRampToValueAtTime(659.25, audioCtx.currentTime + 0.15); // E5
+                    gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.3);
+                } else if (type === 'click') {
+                    osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.05);
+                } else if (type === 'error') {
+                    osc.frequency.setValueAtTime(220, audioCtx.currentTime); // A3
+                    osc.frequency.exponentialRampToValueAtTime(180, audioCtx.currentTime + 0.2);
+                    gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.2);
+                }
+            } catch(e) { /* Audio fallback */ }
+        }
+
+        function togglePlay() {
+            playChime('click');
+            if (isPlaying) {
+                pauseVideo();
+            } else {
+                startVideo();
+            }
+        }
+
+        function startVideo() {
+            isPlaying = true;
+            document.getElementById('overlayPlayIcon').setAttribute('data-lucide', 'pause');
+            document.getElementById('playBtnIcon').setAttribute('data-lucide', 'pause');
+            document.getElementById('playOverlay').classList.add('opacity-0', 'pointer-events-none');
+            if (window.lucide) lucide.createIcons();
+
+            lastTimestamp = performance.now();
+            animationFrameId = requestAnimationFrame(gameLoop);
+        }
+
+        function pauseVideo() {
+            isPlaying = false;
+            document.getElementById('overlayPlayIcon').setAttribute('data-lucide', 'play');
+            document.getElementById('playBtnIcon').setAttribute('data-lucide', 'play');
+            document.getElementById('playOverlay').classList.remove('opacity-0', 'pointer-events-none');
+            if (window.lucide) lucide.createIcons();
+
+            if (animationFrameId) cancelAnimationFrame(animationFrameId);
+        }
+
+        function restartVideo() {
+            currentTime = 0;
+            updateTimelineUI();
+            renderCanvasFrame();
+            if (!isPlaying) startVideo();
+        }
+
+        let lastTimestamp = 0;
+        function gameLoop(timestamp) {
+            if (!isPlaying) return;
+
+            const delta = (timestamp - lastTimestamp) / 1000;
+            lastTimestamp = timestamp;
+
+            currentTime += delta * playbackSpeed;
+            if (currentTime >= duration) {
+                currentTime = duration;
+                pauseVideo();
+            }
+
+            updateTimelineUI();
+            checkChapterProgress();
+            renderCanvasFrame();
+
+            animationFrameId = requestAnimationFrame(gameLoop);
+        }
+
+        function updateTimelineUI() {
+            const percent = (currentTime / duration) * 100;
+            timelineSlider.value = percent;
+            document.getElementById('currentTimeText').innerText = formatTime(currentTime);
+            document.getElementById('durationTimeText').innerText = formatTime(duration);
+        }
+
+        function seekVideo(val) {
+            currentTime = (val / 100) * duration;
+            updateTimelineUI();
+            checkChapterProgress();
+            renderCanvasFrame();
+        }
+
+        function changeSpeed(val) {
+            playbackSpeed = parseFloat(val);
+        }
+
+        function toggleAudioMute() {
+            const icon = document.getElementById('volumeIcon');
+            if (icon.getAttribute('data-lucide') === 'volume-2') {
+                icon.setAttribute('data-lucide', 'volume-x');
+            } else {
+                icon.setAttribute('data-lucide', 'volume-2');
+            }
+            if (window.lucide) lucide.createIcons();
+        }
+
+        function toggleFullscreen() {
+            const playerBox = canvas.parentElement.parentElement;
+            if (!document.fullscreenElement) {
+                playerBox.requestFullscreen().catch(err => console.log("Fullscreen disabled in iframe environment"));
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        function formatTime(secs) {
+            const m = Math.floor(secs / 60);
+            const s = Math.floor(secs % 60);
+            return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+        }
+
+        function checkChapterProgress() {
+            let activeIdx = 0;
+            for (let i = CHAPTERS.length - 1; i >= 0; i--) {
+                if (currentTime >= CHAPTERS[i].time) {
+                    activeIdx = i;
+                    break;
+                }
+            }
+
+            if (activeIdx !== currentChapterIndex) {
+                currentChapterIndex = activeIdx;
+                renderChaptersSidebar();
+                triggerCueOverlay(CHAPTERS[activeIdx].cue);
+            }
+
+            updateSubtitles();
+        }
+
+        function triggerCueOverlay(msg) {
+            const cue = document.getElementById('cueOverlay');
+            document.getElementById('cueOverlayText').innerText = msg;
+            cue.classList.remove('translate-x-full', 'opacity-0');
+            setTimeout(() => {
+                cue.classList.add('translate-x-full', 'opacity-0');
+            }, 4500);
+        }
+
+        function updateSubtitles() {
+            const captionEl = document.getElementById('captionText');
+            if (currentTime < 40) {
+                captionEl.innerText = 'Chapter 1: "A theme is the underlying life lesson of a text. Authors often develop it through character conflicts."';
+            } else if (currentTime < 90) {
+                captionEl.innerText = 'Scene 2: The proud Oak tree shouts, "I bend for no one!" while the Willow gently sways.';
+            } else if (currentTime < 130) {
+                captionEl.innerText = 'Scene 3: A fierce Florida storm arrives. The rigid Oak fights the wind until it violently snaps!';
+            } else {
+                captionEl.innerText = 'Scene 4: The flexible Willow survives unharmed. Stated theme: Adaptability and humility endure life\'s challenges.';
+            }
+        }
+
+        function renderCanvasFrame() {
+            const w = canvas.width;
+            const h = canvas.height;
+
+            // Background Sky Gradient
+            const isStorm = currentTime >= 80 && currentTime < 130;
+            const skyGrad = ctx.createLinearGradient(0, 0, 0, h);
+            if (isStorm) {
+                skyGrad.addColorStop(0, '#0f172a');
+                skyGrad.addColorStop(1, '#334155');
+            } else {
+                skyGrad.addColorStop(0, '#38bdf8');
+                skyGrad.addColorStop(1, '#bae6fd');
+            }
+            ctx.fillStyle = skyGrad;
+            ctx.fillRect(0, 0, w, h);
+
+            // Lightning effect or sun
+            if (isStorm) {
+                if (Math.sin(currentTime * 10) > 0.8) {
+                    ctx.fillStyle = 'rgba(254, 240, 138, 0.3)';
+                    ctx.fillRect(0, 0, w, h);
+                }
+            } else {
+                ctx.fillStyle = '#fef08a';
+                ctx.beginPath();
+                ctx.arc(w * 0.85, h * 0.2, Math.min(30, w/20), 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            // Ground/Ridge
+            ctx.fillStyle = isStorm ? '#1e293b' : '#15803d';
+            ctx.beginPath();
+            ctx.ellipse(w * 0.5, h * 0.9, w * 0.6, h * 0.3, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            const windShift = isStorm ? Math.sin(currentTime * 8) * 25 : Math.sin(currentTime * 2) * 3;
+
+            // DRAW OAK TREE (Left)
+            const oakX = w * 0.35;
+            const oakY = h * 0.72;
+            const isOakSnapped = currentTime >= 110;
+
+            if (!isOakSnapped) {
+                ctx.fillStyle = '#78350f';
+                ctx.fillRect(oakX - 18, oakY - 100, 36, 100);
+
+                ctx.fillStyle = '#166534';
+                ctx.beginPath();
+                ctx.arc(oakX, oakY - 120, 55, 0, Math.PI * 2);
+                ctx.fill();
+
+                if (currentTime >= 40 && currentTime < 80) {
+                    ctx.fillStyle = '#ffffff';
+                    ctx.beginPath();
+                    ctx.roundRect(oakX - 60, oakY - 200, 120, 35, 8);
+                    ctx.fill();
+                    ctx.fillStyle = '#0f172a';
+                    ctx.font = 'bold 11px Inter, sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('"I bend for NO ONE!"', oakX, oakY - 178);
+                }
+            } else {
+                ctx.fillStyle = '#78350f';
+                ctx.fillRect(oakX - 18, oakY - 40, 36, 40);
+                ctx.beginPath();
+                ctx.arc(oakX - 60, oakY - 15, 45, 0, Math.PI * 2);
+                ctx.fillStyle = '#14532d';
+                ctx.fill();
+            }
+
+            // DRAW WILLOW TREE (Right)
+            const willowX = w * 0.65;
+            const willowY = h * 0.72;
+
+            ctx.fillStyle = '#92400e';
+            ctx.fillRect(willowX - 8, willowY - 80, 16, 80);
+
+            ctx.strokeStyle = '#22c55e';
+            ctx.lineWidth = 4;
+            for (let i = -4; i <= 4; i++) {
+                ctx.beginPath();
+                ctx.moveTo(willowX + (i * 6), willowY - 80);
+                ctx.quadraticCurveTo(
+                    willowX + (i * 12) + windShift, 
+                    willowY - 40, 
+                    willowX + (i * 16) + (windShift * 1.5), 
+                    willowY - 10
+                );
+                ctx.stroke();
+            }
+
+            const chapterObj = CHAPTERS[currentChapterIndex];
+            document.getElementById('canvasChapterTitle').innerText = chapterObj.title;
+        }
+
+        function renderQuiz() {
+            const container = document.getElementById('quizContainer');
+            container.innerHTML = QUIZ_QUESTIONS.map((q, qIdx) => {
+                const userAns = userQuizAnswers[qIdx];
+                const isAnswered = userAns !== undefined;
+
+                return `
+                    <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 sm:p-5 space-y-3 shadow-sm">
+                        <div class="flex items-center justify-between">
+                            <span class="bg-indigo-100 text-indigo-800 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                                Question ${q.id} • ${q.category}
+                            </span>
+                            ${isAnswered ? 
+                                (userAns === q.correct ? 
+                                    `<span class="text-xs font-bold text-emerald-600 flex items-center"><i data-lucide="check-circle-2" class="w-4 h-4 mr-1"></i> Correct</span>` : 
+                                    `<span class="text-xs font-bold text-rose-600 flex items-center"><i data-lucide="x-circle" class="w-4 h-4 mr-1"></i> Review Required</span>`
+                                ) : `<span class="text-xs text-slate-400">Unanswered</span>`
+                            }
+                        </div>
+
+                        <h4 class="text-xs sm:text-sm font-bold text-slate-800 leading-snug">${q.question}</h4>
+
+                        <div class="space-y-2 pt-1">
+                            ${q.options.map((opt, oIdx) => {
+                                let btnStyle = "bg-white border-slate-200 text-slate-700 hover:bg-slate-100";
+                                let iconMarkup = `<i data-lucide="circle" class="w-4 h-4 text-slate-300 shrink-0"></i>`;
+
+                                if (isAnswered) {
+                                    if (oIdx === q.correct) {
+                                        btnStyle = "bg-emerald-50 border-emerald-300 text-emerald-900 font-bold ring-1 ring-emerald-400";
+                                        iconMarkup = `<i data-lucide="check-circle" class="w-4 h-4 text-emerald-600 shrink-0"></i>`;
+                                    } else if (oIdx === userAns) {
+                                        btnStyle = "bg-rose-50 border-rose-300 text-rose-900 font-medium";
+                                        iconMarkup = `<i data-lucide="x-circle" class="w-4 h-4 text-rose-500 shrink-0"></i>`;
+                                    } else {
+                                        btnStyle = "bg-slate-50 border-slate-200 text-slate-400 opacity-60";
+                                    }
+                                }
+
+                                return `
+                                    <button 
+                                        onclick="answerQuiz(${qIdx}, ${oIdx})" 
+                                        ${isAnswered ? 'disabled' : ''} 
+                                        class="w-full text-left p-3 text-xs sm:text-sm border rounded-xl transition flex justify-between items-center ${btnStyle}">
+                                        <span class="pr-2">${opt}</span>
+                                        ${iconMarkup}
+                                    </button>
+                                `;
+                            }).join('')}
+                        </div>
+
+                        ${isAnswered ? `
+                            <div class="mt-3 p-3 rounded-xl ${userAns === q.correct ? 'bg-emerald-100/70 border border-emerald-200 text-emerald-900' : 'bg-rose-100/70 border border-rose-200 text-rose-900'} text-xs leading-relaxed space-y-1">
+                                <div class="font-bold uppercase text-[10px] tracking-wider">${userAns === q.correct ? '🎉 Benchmark Insight' : '💡 Review Concept'}</div>
+                                <p>${q.explanation}</p>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }).join('');
+
+            if (window.lucide) lucide.createIcons();
+            updateQuizScoreboard();
+        }
+
+        function answerQuiz(qIdx, selectedIdx) {
+            if (userQuizAnswers[qIdx] !== undefined) return; // Prevent re-answering
+
+            userQuizAnswers[qIdx] = selectedIdx;
+            const q = QUIZ_QUESTIONS[qIdx];
+
+            if (selectedIdx === q.correct) {
+                playChime('success');
+            } else {
+                playChime('error');
+            }
+
+            renderQuiz();
+
+            // Check if all answered
+            const totalAnswered = Object.keys(userQuizAnswers).length;
+            if (totalAnswered === QUIZ_QUESTIONS.length) {
+                masterChecklist.c3 = true;
+                renderChecklist();
+            }
+        }
+
+        function updateQuizScoreboard() {
+            let correctCount = 0;
+            Object.keys(userQuizAnswers).forEach(qIdx => {
+                if (userQuizAnswers[qIdx] === QUIZ_QUESTIONS[qIdx].correct) {
+                    correctCount++;
+                }
+            });
+
+            const total = QUIZ_QUESTIONS.length;
+            document.getElementById('quizScoreDisplay').innerText = `${correctCount} / ${total}`;
+            const pct = (Object.keys(userQuizAnswers).length / total) * 100;
+            document.getElementById('quizProgressBar').style.width = `${pct}%`;
+
+            // Update badge header
+            const badgeText = document.getElementById('badgeStatusText');
+            if (correctCount === total) {
+                badgeText.innerText = 'Florida B.E.S.T. Scholar 🏆';
+            } else if (correctCount >= 5) {
+                badgeText.innerText = 'Theme Master 🌟';
+            } else if (correctCount > 0) {
+                badgeText.innerText = 'Detective Apprentice 🔍';
+            } else {
+                badgeText.innerText = 'Initiate (0/8)';
+            }
+        }
+
+        function resetQuizState() {
+            playChime('click');
+            userQuizAnswers = {};
+            renderQuiz();
+        }
+
+        function renderChaptersSidebar() {
+            const list = document.getElementById('chapterList');
+            list.innerHTML = '';
+
+            CHAPTERS.forEach((ch, idx) => {
+                const isActive = idx === currentChapterIndex;
+                const card = document.createElement('div');
+                card.className = `p-2.5 rounded-xl border transition cursor-pointer flex items-start space-x-2.5 ${
+                    isActive ? 'bg-florida-50 border-florida-300 ring-1 ring-florida-400' : 'bg-slate-50 border-slate-200 hover:bg-slate-100'
+                }`;
+                card.onclick = () => {
+                    playChime('click');
+                    jumpToTimestamp(ch.time);
+                };
+
+                card.innerHTML = `
+                    <div class="w-6 h-6 rounded-full flex items-center justify-center shrink-0 font-bold text-xs ${
+                        isActive ? 'bg-florida-600 text-white' : 'bg-slate-200 text-slate-600'
+                    }">
+                        ${idx + 1}
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex items-center justify-between">
+                            <h5 class="text-xs font-bold text-slate-800">${ch.title}</h5>
+                            <span class="text-[10px] font-mono text-slate-400">${formatTime(ch.time)}</span>
+                        </div>
+                        <p class="text-[11px] text-slate-500 mt-0.5 line-clamp-1">${ch.desc}</p>
+                    </div>
+                `;
+                list.appendChild(card);
+            });
+        }
+
+        function renderChapterMarkers() {
+            const container = document.getElementById('chapterMarkersContainer');
+            container.innerHTML = '';
+
+            CHAPTERS.forEach(ch => {
+                const percent = (ch.time / duration) * 100;
+                const dot = document.createElement('div');
+                dot.className = 'absolute top-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-amber-400 border border-slate-900 rounded-full cursor-pointer hover:scale-125 transition-transform';
+                dot.style.left = `${percent}%`;
+                dot.title = ch.title;
+                dot.onclick = (e) => {
+                    e.stopPropagation();
+                    jumpToTimestamp(ch.time);
+                };
+                container.appendChild(dot);
+            });
+        }
+
+        function jumpToTimestamp(secs) {
+            currentTime = secs;
+            updateTimelineUI();
+            checkChapterProgress();
+            renderCanvasFrame();
+        }
+
+        function switchTab(tabId) {
+            playChime('click');
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+            document.getElementById(`content-${tabId}`).classList.remove('hidden');
+        }
+
+        function showClueDetail(num) {
+            playChime('click');
+            const box = document.getElementById('clueDetailBox');
+            const title = document.getElementById('clueDetailTitle');
+            const text = document.getElementById('clueDetailText');
+            box.classList.remove('hidden');
+
+            if (num === 1) {
+                title.innerText = "Clue 1: Stated Character Mindset (Oak's Pride)";
+                text.innerText = "The Oak boasts about refusing to bend. Authors use dialogue to establish character flaws that will drive the plot conflict!";
+            } else if (num === 2) {
+                title.innerText = "Clue 2: Contrasting Character Trait (Willow's Humility)";
+                text.innerText = "The Willow yields gracefully. By contrasting two characters, the author sets up a comparison to reveal which trait leads to success.";
+            } else if (num === 3) {
+                title.innerText = "Clue 3: Climax Conflict Outcome";
+                text.innerText = "The stubborn Oak breaks during the hurricane. The resolution of a story's climax is the strongest indicator of an implied theme.";
+            } else if (num === 4) {
+                title.innerText = "Clue 4: Stated Theme Realization";
+                text.innerText = "The Oak realizes that adaptability is true strength. When a character learns a life lesson at the end, it directly states the theme!";
+            }
+        }
+
+        function checkOrganizerFormula() {
+            const s1 = document.getElementById('orgStep1').value;
+            const s2 = document.getElementById('orgStep2').value;
+            const s3 = document.getElementById('orgStep3').value;
+            const res = document.getElementById('organizerResult');
+
+            if (!s1 || !s2 || !s3) {
+                res.className = 'p-3.5 rounded-xl border border-slate-200 bg-slate-100 text-xs text-slate-600 text-center font-medium';
+                res.innerText = 'Select an option for all 3 formula steps above!';
+                return;
+            }
+
+            if (s1 === 'rigid' && s2 === 'snapped' && s3 === 'flexibility') {
+                playChime('success');
+                res.className = 'p-3.5 rounded-xl border border-emerald-300 bg-emerald-50 text-xs text-emerald-900 font-bold text-center';
+                res.innerHTML = '🎉 Florida B.E.S.T. Theme Formula Unlocked! You successfully connected Character Traits + Conflict Outcome = Implied Theme!';
+                masterChecklist.c2 = true;
+                renderChecklist();
+            } else {
+                res.className = 'p-3.5 rounded-xl border border-rose-300 bg-rose-50 text-xs text-rose-900 font-medium text-center';
+                res.innerText = '❌ Not quite matching! Remember: The Oak refusing to bend (Step 1) led to snapping (Step 2), proving flexibility is key (Step 3). Try again!';
+            }
+        }
+
+        function resetOrganizer() {
+            document.getElementById('orgStep1').value = '';
+            document.getElementById('orgStep2').value = '';
+            document.getElementById('orgStep3').value = '';
+            checkOrganizerFormula();
+        }
+
+        function renderChecklist() {
+            const container = document.getElementById('checkListContainer');
+            container.innerHTML = `
+                <label class="flex items-center space-x-2 cursor-pointer">
+                    <input type="checkbox" ${masterChecklist.c1 ? 'checked' : ''} onchange="toggleCheck('c1')" class="rounded border-slate-300 text-florida-600 focus:ring-florida-500">
+                    <span>Watch Story Animation & Subtitles</span>
+                </label>
+                <label class="flex items-center space-x-2 cursor-pointer">
+                    <input type="checkbox" ${masterChecklist.c2 ? 'checked' : ''} onchange="toggleCheck('c2')" class="rounded border-slate-300 text-florida-600 focus:ring-florida-500">
+                    <span>Build Theme Detective Formula</span>
+                </label>
+                <label class="flex items-center space-x-2 cursor-pointer">
+                    <input type="checkbox" ${masterChecklist.c3 ? 'checked' : ''} onchange="toggleCheck('c3')" class="rounded border-slate-300 text-florida-600 focus:ring-florida-500">
+                    <span>Complete 8-Question Assessment</span>
+                </label>
+            `;
+
+            const count = Object.values(masterChecklist).filter(Boolean).length;
+            document.getElementById('checklistCount').innerText = `${count}/3 Ready`;
+        }
+
+        function toggleCheck(key) {
+            masterChecklist[key] = !masterChecklist[key];
+            renderChecklist();
+        }
+
+        function insertThemePrompt() {
+            const area = document.getElementById('elaNotes');
+            area.value += "\n\n[Florida B.E.S.T. Reflection]\n- Stated Theme: Directly told in text.\n- Implied Theme: Inferred from character choices & conflict outcomes.";
+            area.focus();
+        }
+
+        function exportNotes() {
+            const txt = document.getElementById('elaNotes').value;
+            if (!txt.trim()) {
+                alert('Notes pad is empty!');
+                return;
+            }
+            const blob = new Blob([txt], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Florida_6th_Grade_Theme_Notes.txt`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('hidden');
+        }
+    </script>
+</body>
+</html>
